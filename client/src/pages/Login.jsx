@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React,{ useState } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { loginStart, loginSuccess, loginFailure } from "../redux/slices/authSlice";
@@ -19,7 +19,8 @@ const Login = () => {
     try {
       const res = await axios.post("http://localhost:5000/api/auth/login", formData);
       dispatch(loginSuccess(res.data));
-      navigate("/dashboard");
+      // navigate("/dashboard");
+      navigate("/auctions");
     } catch (error) {
       dispatch(loginFailure(error.response?.data?.message || "Login failed"));
     }

@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.auth);

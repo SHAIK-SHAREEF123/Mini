@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React,{ useState } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { loginStart, loginSuccess, loginFailure } from "../redux/slices/authSlice";
@@ -28,7 +28,7 @@ const Login = () => {
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="bg-white p-8 rounded-xl shadow-lg w-96">
-                <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+                <h2 className="text-2xl font-bold text-center mb-6">Signup</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <input type="text" name="name" placeholder="name" className="w-full p-3 border rounded"
                         onChange={handleChange} />
