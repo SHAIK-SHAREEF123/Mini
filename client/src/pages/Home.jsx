@@ -9,6 +9,7 @@ const Home = () => {
       try {
         const response = await fetch("http://localhost:5000/api/auctions");
         const data = await response.json();
+        console.log(data);
         setAuctions(data);
       } catch (error) {
         console.error("Error fetching auctions:", error);

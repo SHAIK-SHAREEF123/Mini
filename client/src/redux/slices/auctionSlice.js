@@ -4,6 +4,7 @@ import axios from "axios";
 // Async action to fetch auctions
 export const fetchAuctions = createAsyncThunk("auctions/fetchAuctions", async () => {
   const response = await axios.get("http://localhost:5000/api/auctions");
+  // console.log(response);
   return response.data;
 });
 

@@ -3,15 +3,13 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.js");
-const {verifyToken} = require("../middleware/authMiddleware");
-
+const { verifyToken } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-
 router.get("/protected", verifyToken, (req, res) => {
-    res.json({ message: "This is a protected route", user: req.user });
-  });
+  res.json({ message: "This is a protected route", user: req.user });
+});
 // ✅ Signup Route
 router.post("/signup", async (req, res) => {
   try {
@@ -30,12 +28,22 @@ router.post("/signup", async (req, res) => {
     const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
-     // ✅ Generate Token
-     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    // ✅ Generate Token
+    const token = jwt.sign(
+      {
+        id: user._id, // Ensure this is included
+        name: user.name, // Include name
+        email: user.email, // Include email
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
-    res.status(201).json({ user: { name: newUser.name, email: newUser.email },token });
+    res
+      .status(201)
+      .json({ user: { name: newUser.name, email: newUser.email }, token });
   } catch (err) {
     res.status(500).json({ message: "Server Error" });
   }
@@ -56,9 +64,17 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password." });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      {
+        id: user._id, // Ensure this is included
+        name: user.name, // Include name
+        email: user.email, // Include email
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     res.json({ user: { name: user.name, email: user.email }, token });
   } catch (err) {
@@ -79,7 +95,9 @@ router.post("/auth/google-login", async (req, res) => {
 
     if (!user) {
       if (!name) {
-        return res.status(400).json({ message: "Name is required for new users." });
+        return res
+          .status(400)
+          .json({ message: "Name is required for new users." });
       }
 
       user = new User({ name, email });
@@ -90,7 +108,9 @@ router.post("/auth/google-login", async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.status(200).json({ user: { name: user.name, email: user.email }, token });
+    res
+      .status(200)
+      .json({ user: { name: user.name, email: user.email }, token });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -1,4 +1,4 @@
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { loginStart, loginSuccess, loginFailure } from "../redux/slices/authSlice";
@@ -18,9 +18,13 @@ const Login = () => {
     dispatch(loginStart());
     try {
       const res = await axios.post("http://localhost:5000/api/auth/login", formData);
-      dispatch(loginSuccess(res.data));
-      // navigate("/dashboard");
-      navigate("/auctions");
+
+      // Store the token in localStorage
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user)); // Optional: store user details if needed
+      // console.log(res.data);
+      dispatch(loginSuccess(res.data)); // Pass the data to the Redux store
+      navigate("/auctions"); // Redirect to the auctions page
     } catch (error) {
       dispatch(loginFailure(error.response?.data?.message || "Login failed"));
     }
@@ -31,10 +35,22 @@ const Login = () => {
       <div className="bg-white p-8 rounded-xl shadow-lg w-96">
         <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input type="email" name="email" placeholder="Email" className="w-full p-3 border rounded"
-            onChange={handleChange} />
-          <input type="password" name="password" placeholder="Password" className="w-full p-3 border rounded"
-            onChange={handleChange} />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            className="w-full p-3 border rounded"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="w-full p-3 border rounded"
+            onChange={handleChange}
+            required
+          />
           <button className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700 transition">
             Login
           </button>
