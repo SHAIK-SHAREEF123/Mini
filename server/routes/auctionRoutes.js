@@ -33,7 +33,11 @@ router.post("/", verifyToken, async (req, res) => {
 // ✅ Get all active auctions
 router.get("/", async (req, res) => {
   try {
-    const auctions = await Auction.find({}).populate("createdBy", "email");
+    const auctions = await Auction.find({})
+      .populate("createdBy", "name email")
+      .populate("bids.user", "name email")
+      .exec();
+
     res.status(200).json(auctions);
   } catch (err) {
     console.error("Error fetching auctions:", err);
@@ -110,7 +114,7 @@ router.post("/:id/close", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "Auction not found" });
     }
 
-    console.log("Auction Creator ID:", auction.createdBy.toString());
+    // console.log("Auction Creator ID:", auction.createdBy.toString());
 
     if (auction.createdBy.toString() !== req.user.id) {
       return res.status(403).json({ message: "Only the auction creator can close the auction" });
@@ -119,7 +123,7 @@ router.post("/:id/close", verifyToken, async (req, res) => {
     auction.isActive = false;
     await auction.save();
 
-    console.log("✅ Auction closed successfully:", auction);
+    // console.log("✅ Auction closed successfully:", auction);
     res.status(200).json({ message: "Auction closed successfully", auction });
   } catch (err) {
     console.error("Error closing auction:", err);

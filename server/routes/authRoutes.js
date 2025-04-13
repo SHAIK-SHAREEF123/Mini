@@ -31,9 +31,9 @@ router.post("/signup", async (req, res) => {
     // ✅ Generate Token
     const token = jwt.sign(
       {
-        id: user._id, // Ensure this is included
-        name: user.name, // Include name
-        email: user.email, // Include email
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
       },
       process.env.JWT_SECRET,
       {
@@ -41,9 +41,10 @@ router.post("/signup", async (req, res) => {
       }
     );
 
-    res
-      .status(201)
-      .json({ user: { name: newUser.name, email: newUser.email }, token });
+    res.status(201).json({
+      user: { name: newUser.name, email: newUser.email },
+      token,
+    });
   } catch (err) {
     res.status(500).json({ message: "Server Error" });
   }
