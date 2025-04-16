@@ -40,7 +40,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-purple-200">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 mt-10">
       <ToastContainer position="top-center" />
       <div className="bg-white bg-opacity-30 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-96">
         <h2 className="text-3xl font-bold text-center text-blue-800 mb-6">Signup</h2>

@@ -11,6 +11,11 @@ const LiveAuctions = () => {
     dispatch(fetchAuctions());
   }, [dispatch]);
 
+  // // Log status, auctions, and error for debugging
+  // console.log("Status:", status);
+  // console.log("Auctions:", auctions);
+  // console.log("Error:", error);
+
   if (status === "loading") {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
@@ -21,15 +26,14 @@ const LiveAuctions = () => {
 
   if (status === "failed") {
     return (
-      <div className="min-h-[70vh
-              {console.log(auction)}] flex items-center justify-center">
+      <div className="min-h-[70vh] flex items-center justify-center">
         <p className="text-lg text-red-600 font-semibold">Error: {error}</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10">
+    <div className="max-w-7xl mx-auto pt-8 px-4 py-10">
       <h2 className="text-4xl font-bold text-center text-gray-800 mb-10">
         Live Auctions
       </h2>
@@ -69,8 +73,6 @@ const LiveAuctions = () => {
               ) : (
                 <p className="mt-2 text-red-600 font-bold text-xl">Not Sold</p>
               )}
-
-
 
               {/* View Auction Button */}
               <Link

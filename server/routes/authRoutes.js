@@ -13,6 +13,7 @@ router.get("/protected", verifyToken, (req, res) => {
 // ✅ Signup Route
 router.post("/signup", async (req, res) => {
   try {
+    console.log(req.body);
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -52,6 +53,8 @@ router.post("/signup", async (req, res) => {
 
 // ✅ Login Route
 router.post("/login", async (req, res) => {
+
+  console.log(req.body);
   const { email, password } = req.body;
 
   try {

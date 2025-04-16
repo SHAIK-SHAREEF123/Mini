@@ -1,30 +1,54 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const connectDB = require("./config/db"); // MongoDB connection
+const http = require("http");
+const { Server } = require("socket.io");
+
+const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
-const auctionRoutes = require("./routes/auctionRoutes");
+const createAuctionRoutes = require("./routes/auctionRoutes");
+const user = require('./routes/user')
 
 dotenv.config();
-connectDB(); // Connect to MongoDB
+connectDB();
 
 const app = express();
+const server = http.createServer(app);
 
-// Middlewares
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+});
+
+app.set("io", io); // optional but not used in routes currently
+
+io.on("connection", (socket) => {
+  console.log("🟢 New client connected:", socket.id);
+
+  socket.on("placeBid", (data) => {
+    io.emit("newBid", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("🔴 Client disconnected:", socket.id);
+  });
+});
+
 app.use(express.json());
 app.use(cors());
 
-// Test route
 app.get("/", (req, res) => {
   res.send("Auction API is running...");
 });
 
-// API Routes
-app.use("/api/auth", authRoutes);        // Auth routes
-app.use("/api/auctions", auctionRoutes); // Auction routes
+app.use("/api/auth", authRoutes);
+app.use("/api/auctions", createAuctionRoutes(io));
+app.use("/api/user", require("./routes/user"));
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
